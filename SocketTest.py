@@ -1,4 +1,4 @@
-import socket
+import socket, sys
 PASSWORD = "password"
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
@@ -28,6 +28,10 @@ def correct_direction(direction):
         direction = 4
     elif direction == "s" or direction == "stop":
         direction = 5
+    elif direction == "exit":
+       s.send("exit")
+       s.close()
+       sys.exit()
     else:
         return False
     return direction

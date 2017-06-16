@@ -1,4 +1,4 @@
-import socket
+import socket, sys
 import RPi.GPIO as GPIO
 import time
 import threading
@@ -107,11 +107,15 @@ class MotorThread(threading.Thread):
 try:
     thread = MotorThread(STOP, 0)
     while True:     
-        direction = direction_values[int(client.recv(20))]
+        direction = client.recv(20)
+        if direction == "exit":
+            client.close()
+            sys.exit()
+        direction = direction_values[int(direction)]
     	speed = int(client.recv(20))
-	thread.stop()
-	thread = MotorThread(direction, int(speed))
-	thread.start()
+        thread.stop()
+    	thread = MotorThread(direction, int(speed))
+    	thread.start()
 
 except KeyboardInterrupt:
     GPIO.cleanup()
